@@ -2353,7 +2353,7 @@ class ScaffoldState extends State<Scaffold>
               if (notification.extent > notification.initialExtent) {
                 DraggableScrollableActuator.reset(notification.context);
               }
-              showBodyScrim(value: false, color: Colors.black.withOpacity(0.3));
+              showBodyScrim(value: false, color: Colors.black.withOpacity(0.0));
               _floatingActionButtonVisibilityValue = 1.0;
               _persistentSheetHistoryEntry = null;
             });
@@ -2893,7 +2893,7 @@ class ScaffoldState extends State<Scaffold>
     }
     setState(() {
       _showBodyScrim = value;
-      _bodyScrimColor = color ?? Colors.black.withOpacity(0.3);
+      _bodyScrimColor = color ?? Colors.black.withOpacity(0.0);
     });
   }
 
@@ -3404,11 +3404,17 @@ class _StandardBottomSheetState extends State<_StandardBottomSheet> {
     if (extentRemaining < _kBottomSheetDominatesPercentage) {
       scaffold._floatingActionButtonVisibilityValue =
           extentRemaining * _kBottomSheetDominatesPercentage * 10;
-      scaffold.showBodyScrim(value: true, color: Colors.black.withOpacity(0.3));
+      scaffold.showBodyScrim(
+          value: true,
+          color: Colors.black.withOpacity(math.max(
+            _kMinBottomSheetScrimOpacity,
+            _kMaxBottomSheetScrimOpacity -
+                scaffold._floatingActionButtonVisibilityValue,
+          )));
     } else {
       scaffold._floatingActionButtonVisibilityValue = 1.0;
       scaffold.showBodyScrim(
-          value: false, color: Colors.black.withOpacity(0.3));
+          value: false, color: Colors.black.withOpacity(0.0));
     }
     // If the Scaffold.bottomSheet != null, we're a persistent bottom sheet.
     if (notification.extent == notification.minExtent &&
